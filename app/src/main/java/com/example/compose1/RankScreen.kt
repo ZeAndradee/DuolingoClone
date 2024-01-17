@@ -26,8 +26,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.compose1.ui.theme.dinRoundFamily
 
+
+
 @Composable
 fun RankScreen(navController: NavHostController){
+
     Box (modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFF141f23))
@@ -42,11 +45,29 @@ fun RankScreen(navController: NavHostController){
                 .fillMaxSize()
 
                 .verticalScroll(rememberScrollState())) {
-                var position = 1
-                for (i in 5..30){
-                    val student = Students("Student$i",i*100)
+
+
+                //List Declaration
+                Ranks.clear()
+                var student1 = Students("ZeAndrade", 3365)
+                var student2 = Students("Zythee", 445)
+                var student3 = Students("Randall", 220)
+                var student4 = Students("Guilherme", 110)
+
+                Ranks.addAll(listOf(student1,student2,student3,student4))
+
+                for (i in 1..30){
+                    val student = Students("Student$i",i*10)
                     Ranks.add(student)
                 }
+                val sortedRanks = Ranks.sortedWith(
+                    compareByDescending<Students>{
+                        it.xp
+                    }
+                )
+                //End List Declaration
+
+                var position = 1
 
                 for (i in sortedRanks){
                    Row (modifier = Modifier

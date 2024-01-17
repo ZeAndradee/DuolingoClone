@@ -321,20 +321,13 @@ class Students(
     var xp : Int
 )
 
-var student1 = Students("ZeAndrade", 3365)
-var student2 = Students("Zythee", 445)
-var student3 = Students("Randall", 220)
-var student4 = Students("Guilherme", 110)
 
 
 
-var Ranks = mutableListOf<Students>(student1, student2, student3,student4)
 
-val sortedRanks = Ranks.sortedWith(
-    compareByDescending<Students>{
-        it.xp
-    }
-)
+var Ranks = mutableListOf<Students>()
+
+
 
 
 
