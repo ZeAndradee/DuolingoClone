@@ -1,5 +1,6 @@
 package com.example.compose1
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,12 +15,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,12 +59,12 @@ fun RankScreen(navController: NavHostController){
 
                 Ranks.addAll(listOf(student1,student2,student3,student4))
 
-                for (i in 1..30){
+                for (i in 5..30){
                     val student = Students("Student$i",i*10)
                     Ranks.add(student)
                 }
                 val sortedRanks = Ranks.sortedWith(
-                    compareByDescending<Students>{
+                    compareByDescending {
                         it.xp
                     }
                 )
@@ -70,21 +73,41 @@ fun RankScreen(navController: NavHostController){
                 var position = 1
 
                 for (i in sortedRanks){
+                   if (position == 8){
+                       Row (modifier = Modifier
+                           .fillMaxWidth()
+                           .padding(8.dp), horizontalArrangement = Arrangement.Center){
+                           Icon(painter = painterResource(id = R.drawable.green_arrow) , contentDescription = null, tint = Color.Unspecified, modifier = Modifier .height(18.dp))
+                           Text("ZONA DE PROMOÇÃO", modifier=Modifier .padding(start=15.dp,end=15.dp), color = Color.White, fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
+                           Icon(painter = painterResource(id = R.drawable.green_arrow) , contentDescription = null, tint = Color.Unspecified, modifier = Modifier .height(18.dp))
+                       }
+                   }
                    Row (modifier = Modifier
                        .fillMaxWidth()
-                       .padding(start = 15.dp, end=15.dp),
+                       .padding(start = 15.dp, end = 15.dp),
                        verticalAlignment = Alignment.CenterVertically,
                        horizontalArrangement = Arrangement.SpaceBetween
                    ){
                         Row (modifier = Modifier .padding(top=10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically){
-                            Text("${position}",modifier = Modifier .padding(end=15.dp), color = Color(0xFF7ab83d), fontSize = 17.sp, fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
+                            Row (modifier = Modifier
+                                .width(30.dp)
+                                .padding(end=10.dp),
+                                horizontalArrangement = Arrangement.Center){
+                                Text("${position}",
+                                    color = Color(0xFF7ab83d),
+                                    fontSize = 17.sp,
+                                    fontFamily = dinRoundFamily,
+                                    fontWeight = FontWeight.W600
+                                )
+                            }
+
                             position+=1
                             Box(modifier = Modifier
                                 .clip(CircleShape)
                                 .height(42.dp)
                                 .width(42.dp)
                                 .background(Color.Cyan)
-                                .padding(end=18.dp)
+                                .padding(end = 18.dp)
                             )
                             Text("${i.nickname}",modifier= Modifier .padding(start = 17.dp),color = Color.White,fontSize = 17.sp, fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
 
