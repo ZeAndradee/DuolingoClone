@@ -48,6 +48,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.example.compose1.ui.theme.dinRoundFamily
 
 class MainActivity : ComponentActivity() {
@@ -151,9 +152,13 @@ fun TopMenu(){
                 ) {
                     //Offensive Days
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
+                        var offensiveIcon = when(offensive){
+                            true -> R.drawable.offensive_fire
+                            false -> R.drawable.non_offensive
+                        }
 
-                            painter = painterResource(id = R.drawable.offensive_fire),
+                        Icon(
+                            painter = painterResource(id = offensiveIcon),
                             contentDescription = null,
                             tint = Color.Unspecified,
                             modifier = Modifier
@@ -161,6 +166,10 @@ fun TopMenu(){
                                 .padding(end = 8.dp)
                                 .height(24.dp)
                         )
+                        var offensiveTextColor = when(offensive){
+                            true -> Color(0xFF37464F)
+                            false -> Color(0xFF37464F)
+                        }
                         Text(
                             "${offensiveDays.intValue}",
                             color = Color.White,
