@@ -52,7 +52,7 @@ class Students (
 ): Student
 
 var Ranks = mutableStateListOf<Student>()
-var You = MainStudent("ZeAndrade", 360)
+var You = MainStudent("ZeAndrade", 1200)
 var sortedRanks = mutableStateListOf<Student>()
 
 //Beginning Screen
@@ -80,14 +80,13 @@ fun RankScreen(navController: NavHostController){
                 Ranks.clear()
                 val student1 = Students("Zythee", 445)
                 val student2 = Students("Randall", 220)
-                val student3 = Students("Guilherme", 110)
-
-                Ranks.add(You)
+                val student3 = Students("Guilherme", 80)
                 Ranks.addAll(listOf(student1,student2,student3))
+                Ranks.add(You)
 
                 LaunchedEffect(Unit) {
                     withContext(Dispatchers.Default) {
-                        for (i in 5..30){
+                        for (i in 1..28){
                             val student = Students("Student$i",i*10)
                             withContext(Dispatchers.Main){
                                 Ranks.add(student)

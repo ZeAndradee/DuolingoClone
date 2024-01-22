@@ -8,6 +8,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,6 +58,8 @@ class MainActivity : ComponentActivity() {
             NavHost(
                 navController = navController,
                 startDestination = "home",
+                enterTransition = { fadeIn(animationSpec = tween(100)) },
+                exitTransition = { fadeOut(animationSpec = tween(6000))}
             ){
                 composable("home"){
                     HomeScreen(navController = navController)
@@ -67,112 +72,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 //Var App
-val offensiveDays = mutableIntStateOf(335)
-
+var offensiveDays = mutableIntStateOf(335)
+var offensive = false
 
 
 //Components
-@Composable
-fun BottomMenu(navController: NavHostController){
-    Row( //Bottom Bar
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFF141f23))
-            .height(80.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
 
-                .background(Color(0xFF141f23))
-                .drawBehind {
-                    val strokeWidth = 2.dp.toPx() // Define a espessura da borda
-                    val y = 0f // Define a posição y para a borda superior
-
-                    drawLine(
-                        Color(0xFF3a474d), // Define a cor da borda
-                        Offset(0f, y), // Define o ponto inicial da linha
-                        Offset(size.width, y), // Define o ponto final da linha
-                        strokeWidth // Define a espessura da linha
-                    )
-                },
-
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            for (i in 1..6) {
-                Box(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .width(40.dp)
-                ) {
-                    when (i) {
-                        1 -> Button(
-                            onClick = { navController.navigate("home") },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Transparent
-                            ),
-                            contentPadding = PaddingValues(0.dp)
-
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.house_icon),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                tint = Color.Unspecified
-                            )
-                        }
-
-                        2 -> Icon(
-                            painter = painterResource(id = R.drawable.dumbbell),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            tint = Color.Unspecified
-                        )
-
-                        3 -> Button(
-                            onClick = { navController.navigate("rank") },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                            contentPadding = PaddingValues(0.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.shield),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                tint = Color.Unspecified
-                            )
-                        }
-
-                        4 -> Icon(
-                            painter = painterResource(id = R.drawable.chest),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            tint = Color.Unspecified
-                        )
-
-                        5 -> Icon(
-                            painter = painterResource(id = R.drawable.medium),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape),
-                            tint = Color.Unspecified
-                        )
-
-                        6 -> Icon(
-                            painter = painterResource(id = R.drawable.more),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            tint = Color.Unspecified
-                        )
-
-                    }
-
-                }
-            }
-        }
-    }
-    }
 
 @Composable
 fun TopMenu(){
@@ -247,6 +152,7 @@ fun TopMenu(){
                     //Offensive Days
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
+
                             painter = painterResource(id = R.drawable.offensive_fire),
                             contentDescription = null,
                             tint = Color.Unspecified,
@@ -318,7 +224,109 @@ fun TopMenu(){
     }
 }
 
+@Composable
+fun BottomMenu(navController: NavHostController){
+    Row( //Bottom Bar
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFF141f23))
+            .height(80.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
 
+                .background(Color(0xFF141f23))
+                .drawBehind {
+                    val strokeWidth = 2.dp.toPx() // Define a espessura da borda
+                    val y = 0f // Define a posição y para a borda superior
+
+                    drawLine(
+                        Color(0xFF3a474d), // Define a cor da borda
+                        Offset(0f, y), // Define o ponto inicial da linha
+                        Offset(size.width, y), // Define o ponto final da linha
+                        strokeWidth // Define a espessura da linha
+                    )
+                },
+
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            for (i in 1..6) {
+                Box(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(40.dp)
+                ) {
+                    when (i) {
+                        1 -> Button(
+                            onClick = { navController.navigate("home") },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent
+                            ),
+                            contentPadding = PaddingValues(0.dp)
+
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.house_icon),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                tint = Color.Unspecified
+                            )
+                        }
+
+                        2 -> Icon(
+                            painter = painterResource(id = R.drawable.dumbbell),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            tint = Color.Unspecified
+                        )
+
+                        3 -> Button(
+                            onClick = { navController.navigate("rank"){
+                                launchSingleTop = true
+                            } },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.shield),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                tint = Color.Unspecified
+                            )
+                        }
+
+                        4 -> Icon(
+                            painter = painterResource(id = R.drawable.chest),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            tint = Color.Unspecified
+                        )
+
+                        5 -> Icon(
+                            painter = painterResource(id = R.drawable.medium),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape),
+                            tint = Color.Unspecified
+                        )
+
+                        6 -> Icon(
+                            painter = painterResource(id = R.drawable.more),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            tint = Color.Unspecified
+                        )
+
+                    }
+
+                }
+            }
+        }
+    }
+}
 
 
 
