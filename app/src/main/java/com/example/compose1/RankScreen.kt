@@ -18,6 +18,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,9 +31,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.compose1.ui.theme.dinRoundFamily
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+//Ranks
+interface Student{
+    var nickname : String
+    var xp : Int
+}
+class MainStudent (
+    override var nickname: String,
+    override var xp: Int
+) : Student
 
+class Students (
+    override var nickname : String,
+    override var xp : Int
+): Student
 
+var Ranks = mutableStateListOf<Student>()
+var You = MainStudent("ZeAndrade", 360)
+var sortedRanks = mutableStateListOf<Student>()
+
+//Beginning Screen
 @Composable
 fun RankScreen(navController: NavHostController){
 
@@ -51,23 +76,34 @@ fun RankScreen(navController: NavHostController){
 
 
                 //List Declaration
+
                 Ranks.clear()
-                var student1 = Students("ZeAndrade", 3365)
-                var student2 = Students("Zythee", 445)
-                var student3 = Students("Randall", 220)
-                var student4 = Students("Guilherme", 110)
+                val student1 = Students("Zythee", 445)
+                val student2 = Students("Randall", 220)
+                val student3 = Students("Guilherme", 110)
 
-                Ranks.addAll(listOf(student1,student2,student3,student4))
+                Ranks.add(You)
+                Ranks.addAll(listOf(student1,student2,student3))
 
-                for (i in 5..30){
-                    val student = Students("Student$i",i*10)
-                    Ranks.add(student)
-                }
-                val sortedRanks = Ranks.sortedWith(
-                    compareByDescending {
-                        it.xp
+                LaunchedEffect(Unit) {
+                    withContext(Dispatchers.Default) {
+                        for (i in 5..30){
+                            val student = Students("Student$i",i*10)
+                            withContext(Dispatchers.Main){
+                                Ranks.add(student)
+                                sortedRanks = Ranks.sortedWith(
+                                    compareByDescending {
+                                        it.xp
+                                    }
+                                ).toMutableStateList()
+                            }
+                        }
+
                     }
-                )
+                }
+
+
+
                 //End List Declaration
 
                 var position = 1
@@ -78,23 +114,40 @@ fun RankScreen(navController: NavHostController){
                            .fillMaxWidth()
                            .padding(8.dp), horizontalArrangement = Arrangement.Center){
                            Icon(painter = painterResource(id = R.drawable.green_arrow) , contentDescription = null, tint = Color.Unspecified, modifier = Modifier .height(18.dp))
-                           Text("ZONA DE PROMOÇÃO", modifier=Modifier .padding(start=15.dp,end=15.dp), color = Color.White, fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
+                           Text("ZONA DE PROMOÇÃO", modifier=Modifier .padding(start=15.dp,end=15.dp), color = Color(0xFF79b933), fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
                            Icon(painter = painterResource(id = R.drawable.green_arrow) , contentDescription = null, tint = Color.Unspecified, modifier = Modifier .height(18.dp))
                        }
                    }
+                    if (position == 24){
+                        Row (modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp), horizontalArrangement = Arrangement.Center){
+                            Icon(painter = painterResource(id = R.drawable.red_arrow) , contentDescription = null, tint = Color.Unspecified, modifier = Modifier .height(18.dp))
+                            Text("ZONA DE REBAIXAMENTO", modifier=Modifier .padding(start=15.dp,end=15.dp), color = Color(0xFFd84848), fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
+                            Icon(painter = painterResource(id = R.drawable.red_arrow) , contentDescription = null, tint = Color.Unspecified, modifier = Modifier .height(18.dp))
+                        }
+                    }
                    Row (modifier = Modifier
                        .fillMaxWidth()
                        .padding(start = 15.dp, end = 15.dp),
                        verticalAlignment = Alignment.CenterVertically,
                        horizontalArrangement = Arrangement.SpaceBetween
-                   ){
+                   )
+                   {
                         Row (modifier = Modifier .padding(top=10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically){
                             Row (modifier = Modifier
                                 .width(30.dp)
-                                .padding(end=10.dp),
+                                .padding(end = 10.dp),
                                 horizontalArrangement = Arrangement.Center){
-                                Text("${position}",
-                                    color = Color(0xFF7ab83d),
+
+                                val color = when{
+                                    position < 8 -> Color(0xFF79b933)
+                                    position > 23 -> Color(0xFFd84848)
+                                    else -> Color.White
+                                }
+
+                                Text("$position",
+                                    color = color,
                                     fontSize = 17.sp,
                                     fontFamily = dinRoundFamily,
                                     fontWeight = FontWeight.W600
@@ -109,7 +162,7 @@ fun RankScreen(navController: NavHostController){
                                 .background(Color.Cyan)
                                 .padding(end = 18.dp)
                             )
-                            Text("${i.nickname}",modifier= Modifier .padding(start = 17.dp),color = Color.White,fontSize = 17.sp, fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
+                            Text("${i.nickname}",modifier= Modifier .padding(start = 17.dp),color = Color.White,fontSize = 18.sp, fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)
 
                         }
                        Text("${i.xp} XP",modifier= Modifier ,color = Color.White,fontSize = 17.sp, fontFamily = dinRoundFamily, fontWeight = FontWeight.W600)

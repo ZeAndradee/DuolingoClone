@@ -3,6 +3,7 @@ package com.example.compose1
 import android.net.wifi.hotspot2.pps.HomeSp
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.EnterTransition
@@ -317,17 +318,7 @@ fun TopMenu(){
     }
 }
 
-//Ranks
-class Students(
-    var nickname : String,
-    var xp : Int
-)
 
-
-
-
-
-var Ranks = mutableListOf<Students>()
 
 
 
