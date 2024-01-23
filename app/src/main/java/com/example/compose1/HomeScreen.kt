@@ -35,8 +35,6 @@ import androidx.navigation.NavHostController
 import com.example.compose1.ui.theme.dinRoundFamily
 
 
-
-
 @Composable
 fun HomeScreen(navController: NavHostController) {
     Column(
@@ -52,6 +50,21 @@ fun HomeScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Button(
+                onClick = { offensive.value = !offensive.value },
+                modifier =
+                Modifier
+                    .width(70.dp)
+                    .height(70.dp)
+                    .clip(CircleShape),
+                
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF58CC02)
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(painter = painterResource(id = R.drawable.white_star), contentDescription = null)
+            }
         }
             BottomMenu(navController = navController)
     }

@@ -34,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,7 +75,7 @@ class MainActivity : ComponentActivity() {
 }
 //Var App
 var offensiveDays = mutableIntStateOf(335)
-var offensive = false
+var offensive = mutableStateOf(false)
 
 
 //Components
@@ -152,9 +153,10 @@ fun TopMenu(){
                 ) {
                     //Offensive Days
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        var offensiveIcon = when(offensive){
+                        val offensiveIcon = when(offensive.value){
                             true -> R.drawable.offensive_fire
-                            false -> R.drawable.non_offensive
+                            else -> R.drawable.non_offensive
+
                         }
 
                         Icon(
@@ -164,15 +166,15 @@ fun TopMenu(){
                             modifier = Modifier
                                 .clip(RoundedCornerShape(5.dp))
                                 .padding(end = 8.dp)
-                                .height(24.dp)
+                                .height(20.dp)
                         )
-                        var offensiveTextColor = when(offensive){
-                            true -> Color(0xFF37464F)
-                            false -> Color(0xFF37464F)
+                        var offensiveTextColor = when(offensive.value){
+                            true -> Color.White
+                            false -> Color(0xFF52646c)
                         }
                         Text(
                             "${offensiveDays.intValue}",
-                            color = Color.White,
+                            color = offensiveTextColor,
                             fontFamily = dinRoundFamily,
                             fontWeight = FontWeight.W600,
                             fontSize = 17.sp
@@ -207,7 +209,7 @@ fun TopMenu(){
                                 .height(20.dp)
                         )
                         Text(
-                            "4",
+                            "5",
                             color = Color.White,
                             fontFamily = dinRoundFamily,
                             fontWeight = FontWeight.W600,
